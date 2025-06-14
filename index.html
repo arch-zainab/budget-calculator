@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>حاسبة ميزانية تأثيث المنزل في تركيا</title>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: #f9f9f9; padding: 20px; }
+    .container { max-width: 800px; background: #fff; padding: 20px; border-radius: 10px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input[type="number"], input[type="text"], select, textarea {
+      width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px;
+    }
+    input[type="checkbox"] { margin-left: 5px; }
+    .checkbox-group, .appliance-options, .carpentry-section { margin-top: 10px; }
+    button {
+      margin-top: 20px; padding: 12px 20px; font-size: 18px; background: #222; color: #fff;
+      border: none; border-radius: 8px; cursor: pointer; width: 100%;
+    }
+    h2 { text-align: center; }
+    .hidden { display: none; }
+    #result { font-size: 20px; margin-top: 20px; font-weight: bold; color: green; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>حاسبة ميزانية تأثيث المنزل في تركيا</h2>
+
+    <label>1. مساحة الشقة (م²):</label>
+    <input type="number" id="area" placeholder="مثلاً 160">
+
+    <label>2. أسلوب التصميم:</label>
+    <select id="style">
+      <option value="eco">اقتصادي</option>
+      <option value="mid">متوسط</option>
+      <option value="lux">فندقي فاخر</option>
+    </select>
+
+    <label>3. عدد الغرف (يشمل المطبخ والصالة):</label>
+    <input type="number" id="rooms" placeholder="مثلاً 5">
+
+    <label>4. هل تشمل الميزانية الأجهزة الكهربائية؟</label>
+    <select id="includeAppliances" onchange="toggleAppliances(this.value)">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <div id="applianceSection" class="appliance-options hidden">
+      <label>اختيار ماركة:</label>
+      <select id="brand">
+        <option value="arcelik">أرجلك</option>
+        <option value="beko">بيكو</option>
+      </select>
+    </div>
+
+    <label>5. هل تشمل الستائر؟</label>
+    <select id="curtains">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <label>6. هل تشمل الإضاءة؟</label>
+    <select id="lighting">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <label>7. هل تشمل السجاد؟</label>
+    <select id="carpets">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <label>8. هل تشمل الإكسسوارات واللوحات الجدارية وورق الجدران؟</label>
+    <select id="decor">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <label>9. هل تشمل أعمال النجارة؟</label>
+    <select id="carpentry" onchange="toggleCarpentry(this.value)">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <div id="carpentryDetails" class="carpentry-section hidden">
+      <label>ما الأثاث المطلوب تفصيله؟</label>
+      <textarea id="carpentryItems" placeholder="مثلاً وحدة تلفزيون، مدخل، غرفة ملابس"></textarea>
+    </div>
+
+    <label>10. هل تشمل أعمال التصميم لبعض الأماكن وطلاء الجدران؟</label>
+    <select id="paint">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <label>11. هل تشمل تنظيف المنزل بشكل نهائي؟</label>
+    <select id="cleaning">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
+
+    <button onclick="calculateBudget()">احسب الميزانية</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function toggleAppliances(value) {
+      document.getElementById("applianceSection").classList.toggle("hidden", value !== "yes");
+    }
+
+    function toggleCarpentry(value) {
+      document.getElementById("carpentryDetails").classList.toggle("hidden", value !== "yes");
+    }
+
+    function calculateBudget() {
+      let area = parseFloat(document.getElementById("area").value);
+      let style = document.getElementById("style").value;
+      let rooms = parseInt(document.getElementById("rooms").value);
+      let appliances = document.getElementById("includeAppliances").value === "yes";
+      let curtains = document.getElementById("curtains").value === "yes";
+      let lighting = document.getElementById("lighting").value === "yes";
+      let carpets = document.getElementById("carpets").value === "yes";
+      let decor = document.getElementById("decor").value === "yes";
+      let carpentry = document.getElementById("carpentry").value === "yes";
+      let paint = document.getElementById("paint").value === "yes";
+      let cleaning = document.getElementById("cleaning").value === "yes";
+
+      if (!area || area <= 0 || !rooms || rooms <= 0) {
+        document.getElementById("result").innerText = "يرجى إدخال بيانات صحيحة.";
+        return;
+      }
+
+      let baseRate = style === "eco" ? 120 : style === "mid" ? 170 : 300;
+      let decorRate = style === "eco" ? 20 : style === "mid" ? 30 : 50;
+
+      let total = area * (baseRate + decorRate);
+
+      if (appliances) total += 5000;
+      if (curtains) total += rooms * 150;
+      if (lighting) total += rooms * 100;
+      if (carpets) total += rooms * 100;
+      if (decor) total += rooms * 200;
+      if (carpentry) total += 1500;
+      if (paint) total += area * 10;
+      if (cleaning) total += 300;
+
+      document.getElementById("result").innerText = `💰 الميزانية التقريبية: ${total.toLocaleString()} دولار أمريكي`;
+    }
+  </script>
+</body>
+</html>
