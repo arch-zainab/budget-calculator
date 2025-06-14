@@ -1,154 +1,3 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>حاسبة ميزانية التأثيث - زينب المبارك</title>
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #f7f7f7;
-      padding: 40px;
-      max-width: 800px;
-      margin: auto;
-      direction: rtl;
-    }
-    label, select, input, textarea {
-      display: block;
-      margin: 15px 0 5px;
-      font-size: 16px;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      padding: 12px 20px;
-      background-color: #000;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 30px;
-      font-size: 18px;
-      background-color: #eee;
-      padding: 20px;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-
-<h2>حاسبة تكلفة تأثيث منزلك في إزميت 🏡</h2>
-
-<form id="budgetForm">
-  <label>1. مساحة الشقة (م²):</label>
-  <input type="number" id="area" required>
-
-  <label>2. أسلوب التصميم:</label>
-  <select id="style">
-    <option value="eco">اقتصادي</option>
-    <option value="mid">متوسط</option>
-    <option value="lux">فندقي فاخر</option>
-  </select>
-
-  <label>3. عدد الغرف (يشمل المطبخ والصالة):</label>
-  <input type="number" id="rooms" required>
-
-  <label>4. هل تشمل الأجهزة الكهربائية؟</label>
-  <select id="includeAppliances" onchange="toggleApplianceDetails()">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <div id="applianceDetails" style="display:none;">
-    <label>نوع الماركة:</label>
-    <select id="brand">
-      <option value="beko">بيكو</option>
-      <option value="arcelik">أرجلك</option>
-    </select>
-
-    <label>اكتب الأجهزة (العدد والحجم):</label>
-    <textarea id="applianceList" rows="4" placeholder="مثال: 2 مكيف (18000 و12000 BTU)، تلفزيون 55 بوصة..."></textarea>
-<p style="font-size: 14px; color: #555;">
-📝 اكتب الأجهزة وعددها هكذا:<br>
-- مكيف 18000 × 1<br>
-- مكيف 12000 × 1<br>
-- تلفزيون × 1<br>
-- ثلاجة × 1<br>
-- غسالة ملابس × 1<br>
-- غسالة صحون × 1<br>
-(الأرقام "18000" أو "12000" مهمة لحساب سعر المكيف بدقة)
-</p>
-  </div>
-
-  <label>5. هل تشمل الستائر؟</label>
-  <select id="includeCurtains">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <label>6. هل تشمل الإضاءة؟</label>
-  <select id="includeLighting">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <label>7. هل تشمل السجاد؟</label>
-  <select id="includeCarpets">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <label>8. هل تشمل الإكسسوارات وورق الجدران؟</label>
-  <select id="includeDecor">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <label>9. هل تشمل أعمال النجارة؟</label>
-  <select id="includeWoodwork" onchange="toggleWoodDetails()">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <div id="woodDetails" style="display:none;">
-    <label>حدد التفاصيل:</label>
-    <textarea id="woodList" rows="3" placeholder="مثال: وحدة تلفزيون، مدخل، غرفة ملابس..."></textarea>
-  </div>
-
-  <label>10. هل تشمل الطلاء وتصميم بعض الجدران؟</label>
-  <select id="includePaint">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <label>11. هل يشمل التنظيف النهائي؟</label>
-  <select id="includeCleaning">
-    <option value="no">لا</option>
-    <option value="yes">نعم</option>
-  </select>
-
-  <button type="button" onclick="calculate()">احسب الميزانية 💰</button>
-</form>
-
-<div id="result"></div>
-
-<script>
-function toggleApplianceDetails() {
-  document.getElementById("applianceDetails").style.display = 
-    document.getElementById("includeAppliances").value === "yes" ? "block" : "none";
-}
-function toggleWoodDetails() {
-  document.getElementById("woodDetails").style.display = 
-    document.getElementById("includeWoodwork").value === "yes" ? "block" : "none";
-}
-
 <script>
 function toggleApplianceDetails() {
   document.getElementById("applianceDetails").style.display =
@@ -199,7 +48,7 @@ function calculate() {
     total += applianceCost;
   }
 
-  // إضافات مرتبطة بالمساحة والأسلوب
+  // إضافات حسب الاختيارات
   if (document.getElementById("includeCurtains").value === "yes") {
     total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
   }
@@ -227,10 +76,3 @@ function calculate() {
     `<strong>ميزانيتك التقديرية:</strong><br> ${total.toLocaleString()} دولار أمريكي`;
 }
 </script>
-
-</script>
-
-</body>
-</html>
-
-
