@@ -139,6 +139,16 @@ function toggleWoodDetails() {
     document.getElementById("includeWoodwork").value === "yes" ? "block" : "none";
 }
 
+<script>
+function toggleApplianceDetails() {
+  document.getElementById("applianceDetails").style.display =
+    document.getElementById("includeAppliances").value === "yes" ? "block" : "none";
+}
+function toggleWoodDetails() {
+  document.getElementById("woodDetails").style.display =
+    document.getElementById("includeWoodwork").value === "yes" ? "block" : "none";
+}
+
 function calculate() {
   const area = parseFloat(document.getElementById("area").value);
   const style = document.getElementById("style").value;
@@ -148,54 +158,65 @@ function calculate() {
     return;
   }
 
-  // 🧮 السعر الأساسي حسب الأسلوب
   let baseRate = style === "eco" ? 120 : style === "mid" ? 170 : 300;
   let total = area * baseRate;
 
-  // 📦 الأجهزة الكهربائية
+  // 🧊 الأجهزة الكهربائية بالتفصيل
   if (document.getElementById("includeAppliances").value === "yes") {
-    total += 5000;
+    const applianceText = document.getElementById("applianceList").value.toLowerCase();
+    let applianceCost = 0;
+
+    const countMatches = (keyword) => {
+      const regex = new RegExp(keyword, "g");
+      const matches = applianceText.match(regex);
+      return matches ? matches.length : 0;
+    };
+
+    const ac18000Count = countMatches("18000");
+    const ac12000Count = countMatches("12000");
+    const tvCount = countMatches("تلفزيون");
+    const fridgeCount = countMatches("ثلاجة");
+    const dishwasherCount = countMatches("غسالة صحون");
+    const washerCount = countMatches("غسالة ملابس");
+
+    applianceCost += ac18000Count * 1100;
+    applianceCost += ac12000Count * 800;
+    applianceCost += tvCount * 550;
+    applianceCost += fridgeCount * 800;
+    applianceCost += dishwasherCount * 450;
+    applianceCost += washerCount * 600;
+
+    total += applianceCost;
   }
 
-  // 🪟 الستائر
+  // إضافات مرتبطة بالمساحة والأسلوب
   if (document.getElementById("includeCurtains").value === "yes") {
     total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
   }
-
-  // 💡 الإضاءة
   if (document.getElementById("includeLighting").value === "yes") {
     total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
   }
-
-  // 🏠 السجاد
   if (document.getElementById("includeCarpets").value === "yes") {
     total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
   }
 
-  // 🎨 الإكسسوارات وورق الجدران
   if (document.getElementById("includeDecor").value === "yes") {
     total += style === "eco" ? 800 : style === "mid" ? 1200 : 2000;
   }
-
-  // 🪵 النجارة
   if (document.getElementById("includeWoodwork").value === "yes") {
     total += style === "eco" ? 1500 : style === "mid" ? 2500 : 4000;
   }
-
-  // 🖌 التصميم والطلاء
   if (document.getElementById("includePaint").value === "yes") {
     total += style === "eco" ? 600 : style === "mid" ? 1000 : 1500;
   }
-
-  // 🧼 التنظيف النهائي
   if (document.getElementById("includeCleaning").value === "yes") {
     total += 500;
   }
 
-  // 🎯 النتيجة النهائية
   document.getElementById("result").innerHTML =
     `<strong>ميزانيتك التقديرية:</strong><br> ${total.toLocaleString()} دولار أمريكي`;
 }
+</script>
 
 </script>
 
