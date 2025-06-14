@@ -143,26 +143,60 @@ function calculate() {
   const area = parseFloat(document.getElementById("area").value);
   const style = document.getElementById("style").value;
 
+  if (!area || area <= 0) {
+    document.getElementById("result").innerHTML = "يرجى إدخال مساحة صحيحة.";
+    return;
+  }
+
+  // 🧮 السعر الأساسي حسب الأسلوب
   let baseRate = style === "eco" ? 120 : style === "mid" ? 170 : 300;
   let total = area * baseRate;
 
-  // أجهزة كهربائية
+  // 📦 الأجهزة الكهربائية
   if (document.getElementById("includeAppliances").value === "yes") {
     total += 5000;
   }
 
-  // إضافات
-  if (document.getElementById("includeCurtains").value === "yes") total += 1000;
-  if (document.getElementById("includeLighting").value === "yes") total += 1000;
-  if (document.getElementById("includeCarpets").value === "yes") total += 1000;
-  if (document.getElementById("includeDecor").value === "yes") total += 1500;
-  if (document.getElementById("includeWoodwork").value === "yes") total += 3000;
-  if (document.getElementById("includePaint").value === "yes") total += 1000;
-  if (document.getElementById("includeCleaning").value === "yes") total += 500;
+  // 🪟 الستائر
+  if (document.getElementById("includeCurtains").value === "yes") {
+    total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
+  }
 
+  // 💡 الإضاءة
+  if (document.getElementById("includeLighting").value === "yes") {
+    total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
+  }
+
+  // 🏠 السجاد
+  if (document.getElementById("includeCarpets").value === "yes") {
+    total += area * (style === "eco" ? 5 : style === "mid" ? 7 : 10);
+  }
+
+  // 🎨 الإكسسوارات وورق الجدران
+  if (document.getElementById("includeDecor").value === "yes") {
+    total += style === "eco" ? 800 : style === "mid" ? 1200 : 2000;
+  }
+
+  // 🪵 النجارة
+  if (document.getElementById("includeWoodwork").value === "yes") {
+    total += style === "eco" ? 1500 : style === "mid" ? 2500 : 4000;
+  }
+
+  // 🖌 التصميم والطلاء
+  if (document.getElementById("includePaint").value === "yes") {
+    total += style === "eco" ? 600 : style === "mid" ? 1000 : 1500;
+  }
+
+  // 🧼 التنظيف النهائي
+  if (document.getElementById("includeCleaning").value === "yes") {
+    total += 500;
+  }
+
+  // 🎯 النتيجة النهائية
   document.getElementById("result").innerHTML =
     `<strong>ميزانيتك التقديرية:</strong><br> ${total.toLocaleString()} دولار أمريكي`;
 }
+
 </script>
 
 </body>
