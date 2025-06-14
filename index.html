@@ -2,23 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة ميزانية تأثيث المنزل في تركيا</title>
+  <title>حاسبة تأثيث المنزل</title>
   <style>
-    body { font-family: 'Cairo', sans-serif; background: #f9f9f9; padding: 20px; }
-    .container { max-width: 800px; background: #fff; padding: 20px; border-radius: 10px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="number"], input[type="text"], select, textarea {
+    body { font-family: 'Cairo', sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { background: #fff; padding: 20px; max-width: 800px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; }
+    label { font-weight: bold; margin-top: 15px; display: block; }
+    input, select, textarea, button {
       width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px;
     }
-    input[type="checkbox"] { margin-left: 5px; }
-    .checkbox-group, .appliance-options, .carpentry-section { margin-top: 10px; }
-    button {
-      margin-top: 20px; padding: 12px 20px; font-size: 18px; background: #222; color: #fff;
-      border: none; border-radius: 8px; cursor: pointer; width: 100%;
-    }
-    h2 { text-align: center; }
+    button { background-color: #222; color: white; font-weight: bold; margin-top: 20px; }
     .hidden { display: none; }
-    #result { font-size: 20px; margin-top: 20px; font-weight: bold; color: green; text-align: center; }
+    #result { text-align: center; margin-top: 20px; font-size: 20px; color: green; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -44,12 +39,14 @@
       <option value="yes">نعم</option>
     </select>
 
-    <div id="applianceSection" class="appliance-options hidden">
-      <label>اختيار ماركة:</label>
+    <div id="applianceSection" class="hidden">
+      <label>اختر نوع الماركة:</label>
       <select id="brand">
-        <option value="arcelik">أرجلك</option>
         <option value="beko">بيكو</option>
+        <option value="arcelik">أرجلك</option>
       </select>
+      <label>ما هي الأجهزة وعددها وأحجامها؟</label>
+      <textarea id="applianceDetails" placeholder="مثلاً: تلفزيون 55 إنش، ثلاجة 190×78، غسالة 8 كجم..."></textarea>
     </div>
 
     <label>5. هل تشمل الستائر؟</label>
@@ -82,9 +79,9 @@
       <option value="yes">نعم</option>
     </select>
 
-    <div id="carpentryDetails" class="carpentry-section hidden">
-      <label>ما الأثاث المطلوب تفصيله؟</label>
-      <textarea id="carpentryItems" placeholder="مثلاً وحدة تلفزيون، مدخل، غرفة ملابس"></textarea>
+    <div id="carpentrySection" class="hidden">
+      <label>ما هي القطع المطلوبة؟</label>
+      <textarea id="carpentryDetails" placeholder="مثلاً: وحدة تلفزيون، مدخل، غرفة ملابس..."></textarea>
     </div>
 
     <label>10. هل تشمل أعمال التصميم لبعض الأماكن وطلاء الجدران؟</label>
@@ -93,14 +90,13 @@
       <option value="yes">نعم</option>
     </select>
 
-    <label>11. هل تشمل تنظيف المنزل بشكل نهائي؟</label>
+    <label>11. هل يشمل تنظيف المنزل النهائي؟</label>
     <select id="cleaning">
       <option value="no">لا</option>
       <option value="yes">نعم</option>
     </select>
 
     <button onclick="calculateBudget()">احسب الميزانية</button>
-
     <div id="result"></div>
   </div>
 
@@ -108,45 +104,43 @@
     function toggleAppliances(value) {
       document.getElementById("applianceSection").classList.toggle("hidden", value !== "yes");
     }
-
     function toggleCarpentry(value) {
-      document.getElementById("carpentryDetails").classList.toggle("hidden", value !== "yes");
+      document.getElementById("carpentrySection").classList.toggle("hidden", value !== "yes");
     }
-
     function calculateBudget() {
-      let area = parseFloat(document.getElementById("area").value);
-      let style = document.getElementById("style").value;
-      let rooms = parseInt(document.getElementById("rooms").value);
-      let appliances = document.getElementById("includeAppliances").value === "yes";
-      let curtains = document.getElementById("curtains").value === "yes";
-      let lighting = document.getElementById("lighting").value === "yes";
-      let carpets = document.getElementById("carpets").value === "yes";
-      let decor = document.getElementById("decor").value === "yes";
-      let carpentry = document.getElementById("carpentry").value === "yes";
-      let paint = document.getElementById("paint").value === "yes";
-      let cleaning = document.getElementById("cleaning").value === "yes";
+      const area = parseFloat(document.getElementById("area").value);
+      const style = document.getElementById("style").value;
+      const rooms = parseInt(document.getElementById("rooms").value);
+      const appliances = document.getElementById("includeAppliances").value === "yes";
+      const curtains = document.getElementById("curtains").value === "yes";
+      const lighting = document.getElementById("lighting").value === "yes";
+      const carpets = document.getElementById("carpets").value === "yes";
+      const decor = document.getElementById("decor").value === "yes";
+      const carpentry = document.getElementById("carpentry").value === "yes";
+      const paint = document.getElementById("paint").value === "yes";
+      const cleaning = document.getElementById("cleaning").value === "yes";
 
       if (!area || area <= 0 || !rooms || rooms <= 0) {
-        document.getElementById("result").innerText = "يرجى إدخال بيانات صحيحة.";
+        document.getElementById("result").innerText = "الرجاء إدخال مساحة وعدد غرف صحيح.";
         return;
       }
 
       let baseRate = style === "eco" ? 120 : style === "mid" ? 170 : 300;
       let decorRate = style === "eco" ? 20 : style === "mid" ? 30 : 50;
-
       let total = area * (baseRate + decorRate);
 
       if (appliances) total += 5000;
       if (curtains) total += rooms * 150;
       if (lighting) total += rooms * 100;
-      if (carpets) total += rooms * 100;
+      if (carpets) total += rooms * 120;
       if (decor) total += rooms * 200;
       if (carpentry) total += 1500;
       if (paint) total += area * 10;
       if (cleaning) total += 300;
 
-      document.getElementById("result").innerText = `💰 الميزانية التقريبية: ${total.toLocaleString()} دولار أمريكي`;
+      document.getElementById("result").innerText = `💰 الميزانية التقديرية: ${total.toLocaleString()} دولار أمريكي`;
     }
   </script>
 </body>
 </html>
+
